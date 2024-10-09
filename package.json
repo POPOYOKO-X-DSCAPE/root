@@ -7,14 +7,20 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "bun run index.ts",
-    "clean": "rm -rf node_modules bun.lockb packages/**/node_modules packages/**/bun.lockb"
+    "dev": "bun run index.ts",
+    "clean": "rm -rf node_modules bun.lockb packages/**/node_modules packages/**/bun.lockb project/**/node_modules project/**/bun.lockb"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.3"
+    "@biomejs/biome": "1.9.3",
+    "@types/readline-sync": "^1.4.8"
   },
   "dependencies": {
+    "@types/minimist": "^1.2.5",
+    "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
-    "prompts": "^2.4.2"
+    "kolorist": "^1.8.0",
+    "minimist": "^1.2.8",
+    "prompts": "^2.4.2",
+    "readline-sync": "^1.4.10"
   }
 }

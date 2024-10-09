@@ -4,7 +4,7 @@ import { execSync } from "node:child_process";
 import path from "node:path";
 import fs from "node:fs";
 import prompts from "prompts";
-import { blue, green, red, reset } from "kolorist";
+import { blue, green, red } from "kolorist";
 import minimist from "minimist";
 
 const argv = minimist(process.argv.slice(2), {
@@ -24,7 +24,7 @@ if (argv.help) {
 	process.exit(0);
 }
 
-async function createProject() {
+export async function createProject() {
 	const { projectName } = await prompts({
 		type: "text",
 		name: "projectName",
@@ -68,7 +68,7 @@ async function createProject() {
 		}
 	}
 
-	console.log(`Creating Vite app...`);
+	console.log("Creating Vite app...");
 	execSync(`bun create vite ${projectName} --template react-ts`, {
 		stdio: "inherit",
 	});
@@ -99,7 +99,7 @@ async function createProject() {
 
 	fs.writeFileSync(appTsxPath, appContent);
 
-	console.log(`Migrating from eslint & Prettier to Biome...`);
+	console.log("Migrating from eslint & Prettier to Biome...");
 	execSync("bunx biome migrate eslint --write", { stdio: "inherit" });
 
 	console.log(`Extend the Popoyoko's configuration...`);
@@ -120,19 +120,22 @@ async function createProject() {
 	});
 
 	if (installStorybook === "yes") {
-		console.log(`Installing Storybook...`);
+		console.log("Installing Storybook...");
 		execSync("bunx sb init --skip-install", { stdio: "inherit" });
 		console.log("Storybook installed successfully.");
 		console.log("To start Storybook: bunx storybook");
 	}
 
 	console.log(`Project ${projectName} created successfully!`);
-	console.log(`To get started:`);
+	console.log("To get started:");
 	console.log(`cd ${projectName}`);
-	console.log(`bun run dev`);
-}
+	console.log("bun run dev");
 
-createProject().catch((error) => {
-	console.error("Error creating project, removing the project folder:", error);
-	execSync(`rm -rf ${projectName}`, { stdio: "inherit" });
-});
+	createProject().catch((error) => {
+		console.error(
+			"Error creating project, removing the project folder:",
+			error,
+		);
+		execSync(`rm -rf ${projectName}`, { stdio: "inherit" });
+	});
+}
