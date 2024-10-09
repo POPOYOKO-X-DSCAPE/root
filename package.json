@@ -1,12 +1,20 @@
 {
-  "name": "popoyoko",
-  "private": true,
+  "name": "@popoyoko/root",
+  "private": "true",
   "module": "index.ts",
   "type": "module",
-  "devDependencies": {
-    "@types/bun": "latest"
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "bun run index.ts",
+    "clean": "rm -rf node_modules bun.lockb packages/**/node_modules packages/**/bun.lockb"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "devDependencies": {
+    "@biomejs/biome": "1.9.3"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "prompts": "^2.4.2"
   }
 }

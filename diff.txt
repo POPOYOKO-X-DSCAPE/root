@@ -1,0 +1,42 @@
+diff --git a/bun.lockb b/bun.lockb
+index 945b1a5..e7f5e9a 100755
+Binary files a/bun.lockb and b/bun.lockb differ
+diff --git a/index.ts b/index.ts
+index f67b2c6..2a5e4b8 100644
+--- a/index.ts
++++ b/index.ts
+@@ -1 +1 @@
+-console.log("Hello via Bun!");
+\ No newline at end of file
++console.log("Hello via Bun!");
+diff --git a/package.json b/package.json
+index 3b9c5da..6ad841a 100644
+--- a/package.json
++++ b/package.json
+@@ -1,12 +1,20 @@
+ {
+-  "name": "popoyoko",
+-  "private": true,
++  "name": "@popoyoko/root",
++  "private": "true",
+   "module": "index.ts",
+   "type": "module",
++  "workspaces": [
++    "packages/*"
++  ],
++  "scripts": {
++    "test": "bun run index.ts",
++    "clean": "rm -rf node_modules bun.lockb packages/**/node_modules packages/**/bun.lockb"
++  },
+   "devDependencies": {
+-    "@types/bun": "latest"
++    "@biomejs/biome": "1.9.3"
+   },
+-  "peerDependencies": {
+-    "typescript": "^5.0.0"
++  "dependencies": {
++    "child_process": "^1.0.2",
++    "prompts": "^2.4.2"
+   }
+ }
+\ No newline at end of file
