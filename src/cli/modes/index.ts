@@ -15,5 +15,7 @@ export const UseMode = async (mode: "projects" | "packages") => {
 		choices: output,
 	});
 
-	execSync(`bun run ./${mode}/${workFolder}/index.ts`, { stdio: "inherit" });
+	process.chdir(`${mode}/${workFolder}`);
+
+	execSync("bun run dev", { stdio: "inherit" });
 };
