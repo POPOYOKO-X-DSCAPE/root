@@ -1,7 +1,7 @@
 {
-  "name": "tokenizer",
-  "module": "index.ts",
-  "type": "module",
+  "name": "@popoyoko/tokenizer",
+  "version": "0.0.0",
+  "main": "index.ts",
   "devDependencies": {
     "@types/bun": "latest"
   },

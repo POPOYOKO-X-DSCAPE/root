@@ -1,15 +1,3 @@
-import { tokenizer } from "./src/tokenizer";
+import type { anyToken } from "./src/types/tokens";
 
-console.log(
-	tokenizer({
-		button: {
-			value: {
-				display: "flex",
-				direction: "row",
-			},
-			type: "layout",
-			description: "test",
-			reason: "test",
-		},
-	}),
-);
+export type { anyToken };
