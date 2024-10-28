@@ -1,6 +1,7 @@
 import prompts from "prompts";
 import { UseMode } from "./modes";
 import { createProject } from "./modes/create-project";
+import { execSync } from "child_process";
 
 export const CLI = async () => {
 	const { selectedActivity } = await prompts({
@@ -8,6 +9,10 @@ export const CLI = async () => {
 		name: "selectedActivity",
 		message: "What is your goal?",
 		choices: [
+			{
+				title: "📈 Admin",
+				value: "admin",
+			},
 			{
 				title: "👀 Read the documentation",
 				value: "documentation",
@@ -32,6 +37,11 @@ export const CLI = async () => {
 	});
 
 	switch (selectedActivity) {
+		case "admin":
+			execSync("bun run vite admin", {
+				stdio: "inherit",
+			});
+			break;
 		case "documentation":
 			console.log("Not implemented yet");
 			break;
