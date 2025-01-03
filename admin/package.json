@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "back": "bun run ./src/back/index.tsx",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

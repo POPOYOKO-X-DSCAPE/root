@@ -1,5 +1,5 @@
 {
-  "name": "@popoyoko/tokens",
+  "name": "@popoyoko/decisions",
   "version": "0.0.0",
   "main": "index.ts",
   "devDependencies": {

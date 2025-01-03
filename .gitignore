@@ -177,3 +177,6 @@ diff.txt
 
 #IA/Continue related
 instructs.ia
+
+#admin configuration
+admin/src/back/decisions.json

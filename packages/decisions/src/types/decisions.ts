@@ -1,7 +1,7 @@
 export type Variable<T = unknown> = {
 	name: string;
-	value: T;
 	description?: string;
+	value: T;
 };
 
 export interface Decision {

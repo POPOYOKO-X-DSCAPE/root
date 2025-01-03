@@ -1,4 +1,4 @@
-import type { anyToken } from "../../../packages/tokens";
+import type { anyToken } from "../../../packages/decisions";
 import { createContext, type ReactNode } from "react";
 
 interface IAppContext {
