@@ -8,7 +8,7 @@ export interface Decision {
 	name: string;
 	timestamp: number;
 	description?: string;
-	parent: Decision | null;
+	children: Decision | null;
 	history: Decision[];
 	owner?: string;
 }
