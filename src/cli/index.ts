@@ -38,11 +38,8 @@ export const CLI = async () => {
 
 	switch (selectedActivity) {
 		case "admin":
-			// execSync("bun run vite admin", {
-			// 	stdio: "inherit",
-			// });
 			execSync(
-				'concurrently "bun run admin/src/back/index.ts" "bun run vite admin"',
+				'concurrently "bun --hot run admin/src/back/index.ts" "bun run vite admin"',
 				{
 					stdio: "inherit",
 				},

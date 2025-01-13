@@ -21,13 +21,9 @@ export interface ImplementedDecision extends Decision {
 }
 
 export interface Brand extends Omit<Decision, "children"> {
-	tokens: {
-		brand: SingleToken;
-		semantic: SingleToken;
-		components: SingleToken;
-	};
+	projects: Decision[] | null;
 }
 
 export interface Organisation extends Omit<Decision, "children"> {
-	brands: Brand[];
+	brands: Brand[] | null;
 }
