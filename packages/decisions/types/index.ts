@@ -10,7 +10,7 @@ export interface Decision {
 	name: string;
 	timestamp: number;
 	description?: string;
-	children: Decision | null;
+	children: Decision[] | null;
 	owner?: string;
 }
 

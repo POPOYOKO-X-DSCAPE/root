@@ -3,16 +3,22 @@ import axios from "axios";
 import { Button } from "@popoyoko/ui-kit";
 
 import { useEffect, useState } from "react";
+import { DecisionCard } from "./components/Decision";
+import type { Decision } from "@popoyoko/decisions";
 
 const baseURL = "http://localhost:8080";
 
 const App = () => {
-	const [decisions, setDecisions] = useState(undefined);
+	const [decisions, setDecisions] = useState<Decision | undefined | false>(
+		undefined,
+	);
 
 	const getDecisions = () => {
 		axios
 			.get(`${baseURL}/`)
 			.then((response) => {
+				console.log("response", response.data);
+
 				setDecisions(response.data);
 			})
 			.catch((error) => {
@@ -58,7 +64,7 @@ const App = () => {
 	}
 
 	if (decisions !== undefined) {
-		return <p>{decisions}</p>;
+		return <DecisionCard decision={decisions} />;
 	}
 
 	return <h1>Loading</h1>;

@@ -21,13 +21,13 @@ const server = Bun.serve({
 		}
 
 		if (path === "/") {
-			return new Response(JSON.stringify(getDecisions()), CORS_HEADERS);
+			return new Response(getDecisions(), CORS_HEADERS);
 		}
 
 		if (path === "/init/") {
 			if (getDecisions() === null) {
 				createDecisionFile();
-				return new Response(JSON.stringify(true), CORS_HEADERS);
+				return new Response(getDecisions(), CORS_HEADERS);
 			}
 			return new Response(JSON.stringify(false), CORS_HEADERS);
 		}
