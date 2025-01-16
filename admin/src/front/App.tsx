@@ -1,60 +1,66 @@
-import { format } from "date-fns";
-import type { Organisation, Brand } from "../../../packages/decisions/types";
+import axios from "axios";
+
 import { Button } from "@popoyoko/ui-kit";
 
-const res = await fetch("http://localhost:8080");
-const organisation = (await res.json()) as Organisation;
+import { useEffect, useState } from "react";
 
-const createBrand = async (brand: Brand) => {
-	const body = JSON.stringify(brand);
-	await fetch("http://localhost:8080/brand/create", {
-		headers: { "Content-Type": "application/json" },
-		method: "POST",
-		body,
-	}).then((response) => {
-		if (!response.ok) {
-			throw new Error("Network response was not ok");
-		}
-		return response.json();
-	});
-};
+const baseURL = "http://localhost:8080";
 
 const App = () => {
-	const { name, description, brands, timestamp, owner } = organisation;
+	const [decisions, setDecisions] = useState(undefined);
 
-	if (organisation) {
+	const getDecisions = () => {
+		axios
+			.get(`${baseURL}/`)
+			.then((response) => {
+				setDecisions(response.data);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	const createDecisions = () => {
+		axios
+			.get(`${baseURL}/init/`)
+			.then((response) => {
+				if (response) {
+					getDecisions();
+				}
+			})
+			.catch((error) => {
+				console.log("not working");
+				console.error(error);
+			});
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		getDecisions();
+	}, []);
+
+	if (decisions === false) {
 		return (
 			<>
-				<h1>{name}</h1>
-				<p>{description}</p>
-				{brands && (
-					<>
-						<h2>Brands:</h2>
-						<ul>
-							{brands.map((brand, index) => (
-								// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-								<li key={index}>{brand.name}</li>
-							))}
-						</ul>
-					</>
-				)}
-				<p>Timestamp: {format(timestamp, "yyyy-MM-dd HH:mm:ss")}</p>
-				<p>Owner: {owner}</p>
-				<Button action={() => console.log("test")}>Edit Organization</Button>
-				<Button
-					action={() =>
-						createBrand({
-							projects: null,
-							name: "Ma marque",
-							timestamp: new Date().getTime(),
-						})
-					}
-				>
-					CreateBrand
-				</Button>
+				<p>Error reading decisions</p>
+				<Button action={() => createDecisions()}>ReInitialize decisions</Button>
 			</>
 		);
 	}
+
+	if (decisions === null) {
+		return (
+			<>
+				<p>No decisions found</p>
+				<Button action={() => createDecisions()}>Initialize decisions</Button>
+			</>
+		);
+	}
+
+	if (decisions !== undefined) {
+		return <p>{decisions}</p>;
+	}
+
 	return <h1>Loading</h1>;
 };
 

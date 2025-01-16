@@ -18,6 +18,7 @@
     "@tokens-studio/types": "^0.5.1",
     "@types/minimist": "^1.2.5",
     "@types/prompts": "^2.4.9",
+    "axios": "^1.7.9",
     "child_process": "^1.0.2",
     "concurrently": "^9.1.2",
     "date-fns": "^4.1.0",

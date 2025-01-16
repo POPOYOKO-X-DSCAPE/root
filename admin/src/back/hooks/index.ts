@@ -1,40 +1,32 @@
+import type { Decision } from "@popoyoko/decisions";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { writeFileSync, readFileSync } from "node:fs";
 
-import type { Organisation } from "../../../../packages/decisions/types";
+const decisionsDirName = "../decisions.json";
+const decisionsFilePath = resolve(__dirname, decisionsDirName);
 
-const organisationDirName = "../organisation.json";
-const organisationFilePath = resolve(__dirname, organisationDirName);
-const organisationFileContent = () => {
-	if (!existsSync(organisationFilePath)) {
-		createOrganisation("Popoyoko");
+export const getDecisions = (): string | null => {
+	if (existsSync(decisionsFilePath)) {
+		return readFileSync(decisionsFilePath, "utf-8");
 	}
-	return readFileSync(organisationFilePath, "utf-8");
-};
-
-export const getOrganisation = (): string | null => {
-	if (readFileSync(organisationFilePath, "utf-8")) {
-		return organisationFileContent();
-	}
-
 	return null;
 };
 
-export const createOrganisation = (orgName: string) => {
-	console.log(
-		`Organisation file does not exist. Creating the ${orgName} organisation file`,
-	);
+export const createDecisionFile = () => {
+	if (getDecisions() === null) {
+		console.error("Decision file already exists. Skipping");
+	}
 
-	const organisation: Organisation = {
-		name: orgName,
+	console.log("Creating the decisions.json file");
+
+	const decisions: Decision = {
+		name: "decisions",
 		timestamp: Date.now(),
-		brands: null,
+		children: null,
 	};
 
-	writeFileSync(organisationFilePath, JSON.stringify(organisation, null, 2));
+	writeFileSync(decisionsFilePath, JSON.stringify(decisions, null, 2));
 
-	console.log(`${orgName} organisation file created successfully.`);
-
-	return readFileSync(organisationFilePath, "utf-8");
+	console.info("Decisions file created successfully.");
 };

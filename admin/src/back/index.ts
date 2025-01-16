@@ -1,17 +1,17 @@
-import { getOrganisation } from "./hooks";
+import { createDecisionFile, getDecisions } from "./hooks";
 
 const CORS_HEADERS = {
 	headers: {
-		"Access-Control-Allow-Origin": "http://127.0.0.1:5173",
-		"Access-Control-Allow-Methods": "OPTIONS, POST, PUT, DELETE",
-		"Access-Control-Allow-Headers": "Content-Type, Authorization",
+		"Access-Control-Allow-Origin": "http://localhost:5173",
+		"Access-Control-Allow-Methods": "GET, OPTIONS, POST, PUT, DELETE",
+		"Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
 	},
 };
 
-Bun.serve({
+const server = Bun.serve({
 	port: 8080,
 
-	async fetch(req) {
+	fetch(req) {
 		const path = new URL(req.url).pathname;
 
 		// Handle CORS preflight requests
@@ -21,18 +21,19 @@ Bun.serve({
 		}
 
 		if (path === "/") {
-			const organisation = getOrganisation();
-
-			if (organisation !== null) {
-				return new Response(organisation.toString(), CORS_HEADERS);
-			}
-			return new Response("No organisation found.", {
-				status: 404,
-			});
+			return new Response(JSON.stringify(getDecisions()), CORS_HEADERS);
 		}
 
-		if (req.method === "POST" && path === "/brand/create") {
-			const data = await req.json();
+		if (path === "/init/") {
+			if (getDecisions() === null) {
+				createDecisionFile();
+				return new Response(JSON.stringify(true), CORS_HEADERS);
+			}
+			return new Response(JSON.stringify(false), CORS_HEADERS);
+		}
+
+		if (req.method === "POST" && path === "/brand/create/") {
+			const data = req.json();
 			console.log("Received JSON:", data);
 			return new Response(JSON.stringify(data), CORS_HEADERS);
 		}
@@ -40,3 +41,5 @@ Bun.serve({
 		return new Response("404!");
 	},
 });
+
+console.log(`Listening on ${server.url}`);
