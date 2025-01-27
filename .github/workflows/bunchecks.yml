@@ -44,4 +44,4 @@ jobs:
         run: bun i
 
       - name: 🧿 linter
-        run: bunx biome lint --write ./src ./admin ./projects ./packages --error-on-warnings
+        run: bunx biome lint ./ --error-on-warnings
