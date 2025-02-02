@@ -11,7 +11,7 @@
     "clean": "rm -rf node_modules bun.lockb packages/**/node_modules packages/**/bun.lockb project/**/node_modules project/**/bun.lockb admin/node_modules admin/bun.lockb"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.3",
+    "@biomejs/biome": "1.9.4",
     "@types/readline-sync": "^1.4.8"
   },
   "dependencies": {
