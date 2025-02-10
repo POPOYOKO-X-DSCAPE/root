@@ -181,3 +181,4 @@ instructs.ia
 #admin configuration
 admin/src/back/decisions.json
 decisions.sql
+decisions.sqlite

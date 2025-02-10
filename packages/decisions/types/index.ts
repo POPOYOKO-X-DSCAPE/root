@@ -1,5 +1,3 @@
-import type { SingleToken } from "@tokens-studio/types";
-
 export type Variable<T = unknown> = {
 	name: string;
 	description?: string;
