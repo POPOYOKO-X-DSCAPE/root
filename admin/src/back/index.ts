@@ -1,8 +1,8 @@
-import { createDecisionFile, getDecisions } from "./hooks";
+import { getDecisions } from "./hooks";
 
 const CORS_HEADERS = {
 	headers: {
-		"Access-Control-Allow-Origin": "http://localhost:5173",
+		"Access-Control-Allow-Origin": "http://127.0.0.1:5173",
 		"Access-Control-Allow-Methods": "GET, OPTIONS, POST, PUT, DELETE",
 		"Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
 	},
@@ -21,15 +21,7 @@ const server = Bun.serve({
 		}
 
 		if (path === "/") {
-			return new Response(getDecisions(), CORS_HEADERS);
-		}
-
-		if (path === "/init/") {
-			if (getDecisions() === null) {
-				createDecisionFile();
-				return new Response(getDecisions(), CORS_HEADERS);
-			}
-			return new Response(JSON.stringify(false), CORS_HEADERS);
+			return new Response(JSON.stringify(getDecisions()), CORS_HEADERS);
 		}
 
 		if (req.method === "POST" && path === "/brand/create/") {

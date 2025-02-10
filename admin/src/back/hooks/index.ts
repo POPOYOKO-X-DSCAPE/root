@@ -1,32 +1,23 @@
-import type { Decision } from "@popoyoko/decisions";
-import { existsSync } from "node:fs";
-import { resolve } from "node:path";
-import { writeFileSync, readFileSync } from "node:fs";
+import {
+	createDecision,
+	createDecisionTable,
+	db,
+	isDecisionTable,
+} from "@popoyoko/decisions/src/hooks/database";
 
-const decisionsDirName = "../decisions.json";
-const decisionsFilePath = resolve(__dirname, decisionsDirName);
-
-export const getDecisions = (): string | null => {
-	if (existsSync(decisionsFilePath)) {
-		return readFileSync(decisionsFilePath, "utf-8");
+export const getDecisions = () => {
+	if (!isDecisionTable()) {
+		createDecisionTable();
+		createDecision({
+			name: "root decision",
+			timestamp: Date.now(),
+			description: "this is your first decision",
+			owner: "LouiFi",
+			parent_id: null,
+		});
 	}
-	return null;
-};
 
-export const createDecisionFile = () => {
-	if (getDecisions() === null) {
-		console.error("Decision file already exists. Skipping");
-	}
+	const decisions = db.query("SELECT * FROM decisions;").get();
 
-	console.log("Creating the decisions.json file");
-
-	const decisions: Decision = {
-		name: "decisions",
-		timestamp: Date.now(),
-		children: null,
-	};
-
-	writeFileSync(decisionsFilePath, JSON.stringify(decisions, null, 2));
-
-	console.info("Decisions file created successfully.");
+	return decisions;
 };
