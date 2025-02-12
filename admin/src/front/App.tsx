@@ -1,73 +1,148 @@
 import axios from "axios";
 
-import { Button } from "@popoyoko/ui-kit";
+import { Button, Card } from "@popoyoko/ui-kit";
 
+import type { Decision } from "@popoyoko/decisions/types";
 import { useEffect, useState } from "react";
-import { DecisionCard } from "./components/Decision";
-import type { Decision } from "@popoyoko/decisions";
 
 const baseURL = "http://localhost:8080";
 
 const App = () => {
-	const [decisions, setDecisions] = useState<Decision | undefined | false>(
+	const [organizations, setOrganizations] = useState<Decision[] | undefined>(
 		undefined,
 	);
+	const [newOrgName, setNewOrgName] = useState<string>("");
+	const [currentOrg, setCurrentOrg] = useState<Decision | undefined>(undefined);
 
-	const getDecisions = () => {
+	const reinit = () => {
+		axios
+			.put(`${baseURL}/reinitialize/`)
+			.then((response) => {
+				if (response.status === 200) {
+					getOrganizations();
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	const getOrganizations = () => {
 		axios
 			.get(`${baseURL}/`)
 			.then((response) => {
-				console.log("response", response.data);
-
-				setDecisions(response.data);
+				setOrganizations(response.data);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
 	};
 
-	const createDecisions = () => {
+	const createOrganization = (orgName: string) => {
 		axios
-			.get(`${baseURL}/init/`)
+			.post(`${baseURL}/create-org/`, { name: orgName })
 			.then((response) => {
-				if (response) {
-					getDecisions();
+				if (response.status === 200) {
+					getOrganizations();
 				}
 			})
 			.catch((error) => {
-				console.log("not working");
+				console.error(error.response.data);
+			});
+	};
+
+	const createDecision = () => {
+		axios
+			.post(`${baseURL}/create-decision/`, {
+				orgId: currentOrg?.id,
+				decision: {
+					name: "test",
+					timestamp: Date.now(),
+					description: "test",
+					owner: "LouiFi",
+					parent_id: null,
+				},
+			})
+			.then((response) => {
+				if (response.status === 201) {
+					getOrganizations();
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	const deleteOrganization = (orgId: number) => {
+		axios
+			.delete(`${baseURL}/delete-org/`, { data: orgId })
+			.then((response) => {
+				if (response.status === 200) {
+					setCurrentOrg(undefined);
+					getOrganizations();
+				}
+			})
+			.catch((error) => {
 				console.error(error);
 			});
 	};
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		getDecisions();
+		getOrganizations();
 	}, []);
 
-	if (decisions === false) {
+	if (currentOrg?.id) {
 		return (
 			<>
-				<p>Error reading decisions</p>
-				<Button action={() => createDecisions()}>ReInitialize decisions</Button>
+				<Button action={() => reinit()}>REINIT</Button>
+				<h1>{currentOrg.name}</h1>
+				<Button action={() => createDecision()}>Create new decision</Button>
+				<Button action={() => setCurrentOrg(undefined)}>
+					Close organization
+				</Button>
+				<Button action={() => deleteOrganization(currentOrg.id)}>
+					Delete organization
+				</Button>
 			</>
 		);
 	}
 
-	if (decisions === null) {
-		return (
-			<>
-				<p>No decisions found</p>
-				<Button action={() => createDecisions()}>Initialize decisions</Button>
-			</>
-		);
+	if (organizations === undefined) {
+		return <h1>Loading</h1>;
 	}
+	return (
+		<>
+			<Button action={() => reinit()}>REINIT</Button>
+			{organizations && organizations.length > 0 ? (
+				organizations?.map((organization, index: number) => (
+					<Card
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+						key={index}
+						onClick={() => setCurrentOrg(organization)}
+					>
+						{organization.name}
+					</Card>
+				))
+			) : (
+				<>
+					<p>No organization found</p>
+				</>
+			)}
 
-	if (decisions !== undefined) {
-		return <DecisionCard decision={decisions} />;
-	}
-
-	return <h1>Loading</h1>;
+			<Card>
+				<input
+					type="text"
+					placeholder="Organization name"
+					value={newOrgName}
+					onChange={(e) => setNewOrgName(e.target.value)}
+				/>
+				<Button action={() => createOrganization(newOrgName)}>
+					Add organization
+				</Button>
+			</Card>
+		</>
+	);
 };
 
 export default App;

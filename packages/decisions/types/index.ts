@@ -5,11 +5,12 @@ export type Variable<T = unknown> = {
 };
 
 export interface Decision {
+	id: number;
 	name: string;
 	timestamp: number;
-	description?: string;
-	children: Decision[] | null;
-	owner?: string;
+	description: string;
+	owner: string;
+	parent_id?: number | null;
 }
 
 export interface ImplementedDecision extends Decision {
@@ -22,6 +23,6 @@ export interface Brand extends Omit<Decision, "children"> {
 	projects: Decision[] | null;
 }
 
-export interface Organisation extends Omit<Decision, "children"> {
+export interface Organization extends Omit<Decision, "children"> {
 	brands: Brand[] | null;
 }

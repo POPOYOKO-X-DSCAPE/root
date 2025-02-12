@@ -26,9 +26,9 @@ export const DecisionCard = ({ decision }: DecisionCardProps) => {
 				)}
 				{owner && <span>Owner: {owner}</span>}
 			</ul>
-			<Button>Edit</Button>
-			<Button>Add child decision</Button>
-			<Button>Delete</Button>
+			{/* <Button action={() => }>Edit</Button> */}
+			<Button action={() => console.log("ahahah")}>Add child decision</Button>
+			{/* <Button action={() => }>Delete</Button> */}
 		</div>
 	);
 };

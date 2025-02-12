@@ -1,54 +1,22 @@
 import { Database } from "bun:sqlite";
 
+export * from "./database/decisions";
+export * from "./database/organization";
+
 export const db = new Database("decisions.sqlite");
 
-interface Decision {
-	id?: number;
-	name: string;
-	timestamp: number;
-	description: string;
-	owner: string;
-	parent_id?: number | null;
-}
-
-export const createDecision = ({
-	name,
-	timestamp,
-	description,
-	owner,
-	parent_id,
-}: Decision) => {
-	console.log(
-		db
-			.query(
-				`INSERT INTO decisions (name, timestamp, description, owner, parent_id) VALUES ('${name}', ${timestamp}, '${description}', '${owner}', ${parent_id ?? "NULL"});`,
-			)
-			.run(),
-	);
+export const reinItializeDatabase = () => {
+	db.query("DROP TABLE IF EXISTS organizations").run();
+	initializeDatabase();
 };
 
-export const createDecisionTable = () => {
-	db.query(`CREATE TABLE decisions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name VARCHAR(255) NOT NULL,
-            timestamp BIGINT NOT NULL,
-            description TEXT,
-            owner VARCHAR(255),
-            parent_id INT,
-            FOREIGN KEY (parent_id) REFERENCES decisions(id) ON DELETE CASCADE
-            );`).run();
-};
-
-export const isDecisionTable = () => {
-	if (
-		db
-			.query(`SELECT name
-	            FROM sqlite_master
-	            WHERE type = 'table' AND name = 'decisions';
-                  `)
-			.get()
-	) {
-		return true;
-	}
-	return false;
+export const initializeDatabase = () => {
+	db.query(`CREATE TABLE IF NOT EXISTS organizations (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		name TEXT UNIQUE NOT NULL,
+		timestamp INTEGER NOT NULL,
+		description TEXT NOT NULL,
+		owner TEXT NOT NULL,
+		parent_id INTEGER DEFAULT NULL
+	);`).run();
 };
