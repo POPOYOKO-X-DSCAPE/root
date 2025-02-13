@@ -7,8 +7,12 @@ export const Register = () => {
 	const [pass, setPass] = useState<string>("");
 	const [confirmPass, setConfirmPass] = useState<string>("");
 
-	const logUser = () => {
-		console.log("Logged in");
+	const registerUser = () => {
+		if (pass !== confirmPass) {
+			console.log("Passwords do not match");
+		} else {
+			console.log("Registering user");
+		}
 	};
 
 	return (
@@ -32,7 +36,7 @@ export const Register = () => {
 				value={confirmPass}
 				onChange={(e) => setConfirmPass(e.target.value)}
 			/>
-			<Button action={() => logUser()}>Login</Button>
+			<Button action={() => registerUser()}>Register</Button>
 			<p>
 				Already an accompte? <Link to="/login">Login</Link>
 			</p>
