@@ -1,5 +1,6 @@
 import { Button } from "@popoyoko/ui-kit";
 import { useState } from "react";
+import { Link } from "react-router";
 
 export const Register = () => {
 	const [user, setUser] = useState<string>("");
@@ -33,10 +34,7 @@ export const Register = () => {
 			/>
 			<Button action={() => logUser()}>Login</Button>
 			<p>
-				Not registered? <a href="/register">Register</a>
-			</p>
-			<p>
-				Forgot password? <a href="/forgot-password">Reset Password</a>
+				Already an accompte? <Link to="/login">Login</Link>
 			</p>
 		</>
 	);
