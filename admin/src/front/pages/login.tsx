@@ -1,6 +1,8 @@
 import { Button } from "@popoyoko/ui-kit";
+import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router";
+import { baseURL } from "../App";
 
 export const Login = () => {
 	const [user, setUser] = useState<string>("");
@@ -14,7 +16,16 @@ export const Login = () => {
 	};
 
 	const logUser = () => {
-		console.log("Logged in");
+		axios
+			.post(`${baseURL}/login/`, { user: user, password: pass })
+			.then((response) => {
+				if (response.status === 200) {
+					console.log(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
 	};
 
 	return (

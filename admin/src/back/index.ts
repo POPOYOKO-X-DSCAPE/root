@@ -1,9 +1,13 @@
 import {
 	createDecision,
 	createOrganization,
+	createUser,
 	deleteOrganization,
+	deleteUsers,
 	getOrganizations,
 	initializeDatabase,
+	listUsers,
+	loginUser,
 	reinItializeDatabase,
 } from "@popoyoko/decisions/src/hooks/database";
 
@@ -16,10 +20,12 @@ const ResponseInit: ResponseInit = {
 };
 
 initializeDatabase();
+deleteUsers("*");
+createUser("LouiFi", "test");
+listUsers();
 
 const server = Bun.serve({
 	port: 8080,
-
 	async fetch(req) {
 		const path = new URL(req.url).pathname;
 
@@ -84,6 +90,15 @@ const server = Bun.serve({
 			} catch (error) {
 				return new Response(`Error deleting: ${error}`, ResponseInit);
 			}
+		}
+
+		if (req.method === "POST" && path === "/login/") {
+			const { user, password } = await req.json();
+
+			if (await loginUser(user, password)) {
+				return new Response("Welcome", ResponseInit);
+			}
+			return new Response("Wrong user or password!", ResponseInit);
 		}
 
 		return new Response("404!");

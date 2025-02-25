@@ -2,8 +2,7 @@ import type { Decision } from "@popoyoko/decisions/types";
 import { Button, Card } from "@popoyoko/ui-kit";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
-const baseURL = "http://localhost:8080";
+import { baseURL } from "../App";
 
 export const Organizations = () => {
 	const [organizations, setOrganizations] = useState<Decision[] | undefined>(

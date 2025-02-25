@@ -3,6 +3,8 @@ import { Login } from "./pages/login";
 import { Organizations } from "./pages/organizations";
 import { Register } from "./pages/register";
 
+export const baseURL = "http://localhost:8080";
+
 const App = () => {
 	return (
 		<Routes>
